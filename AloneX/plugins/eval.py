@@ -18,7 +18,7 @@ from AloneX import anon, app, config, db, lang, userbot
 from AloneX.helpers import format_exception, meval
 
 
-@app.on_message(filters.command(["eval", "exec"]) & filters.user(app.owner))
+@app.on_message(filters.command(["eval", "geri"]) & filters.user(app.owner))
 @app.on_edited_message(filters.command(["eval", "exec"]) & filters.user(app.owner))
 @lang.language()
 async def eval_handler(_, message: types.Message):
