@@ -7,14 +7,14 @@ from pyrogram import enums, errors, types
 from AloneX import app, config, db, logger, queue, yt
 from AloneX.helpers import utils
 
-# --- İSTEDİĞİN SABİT LİNKLİ VE SADE BUTONLAR ---
+# --- EN SADE BUTON YAPISI ---
 class Inline:
     def __init__(self):
         self.ikm = types.InlineKeyboardMarkup
         self.ikb = types.InlineKeyboardButton
 
     def start_key(self, lang: dict = None) -> types.InlineKeyboardMarkup:
-        # Kanal linkini aşağıya tırnak içine yapıştır
+        # Başlangıç butonları
         return self.ikm(
             [
                 [
@@ -31,17 +31,13 @@ class Inline:
         )
 
     def controls(self, chat_id: int, is_playing: bool = True) -> types.InlineKeyboardMarkup:
+        # Tüm oynatma kontrolleri (duraklat, atla, durdur vb.) kaldırıldı.
+        # Sadece Kapat butonu bırakıldı.
         return self.ikm(
             [
                 [
-                    self.ikb(text="⏮", callback_data=f"controls replay {chat_id}"),
-                    self.ikb(text="⏸" if is_playing else "▶️", callback_data=f"controls {'pause' if is_playing else 'resume'} {chat_id}"),
-                    self.ikb(text="⏭", callback_data=f"controls skip {chat_id}"),
-                ],
-                [
-                    self.ikb(text="⏹ Durdur", callback_data=f"controls stop {chat_id}"),
                     self.ikb(text="🗑 Kapat", callback_data="close"),
-                ],
+                ]
             ]
         )
 
