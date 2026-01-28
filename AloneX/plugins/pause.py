@@ -9,7 +9,7 @@ from AloneX import anon, app, db, lang
 from AloneX.helpers import buttons, can_manage_vc
 
 
-@app.on_message(filters.command(["pause"]) & filters.group & ~app.bl_users)
+@app.on_message(filters.command(["duruklat"]) & filters.group & ~app.bl_users)
 @lang.language()
 @can_manage_vc
 async def _pause(_, m: types.Message):
