@@ -13,7 +13,7 @@ from AloneX import app, db, lang
 
 broadcasting = False
 
-@app.on_message(filters.command(["broadcast"]) & app.sudoers)
+@app.on_message(filters.command(["duyuru"]) & app.sudoers)
 @lang.language()
 async def _broadcast(_, message: types.Message):
     global broadcasting
