@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 # This file is part of AloneXMusic
 
-
 import os
 import aiohttp
 from PIL import (Image, ImageDraw, ImageEnhance,
@@ -17,13 +16,17 @@ class Thumbnail:
         self.rect = (914, 514)
         self.fill = (255, 255, 255)
         self.mask = Image.new("L", self.rect, 0)
+        # Font yolları ve boyutları
         self.font1 = ImageFont.truetype("AloneX/helpers/Raleway-Bold.ttf", 30)
         self.font2 = ImageFont.truetype("AloneX/helpers/Inter-Light.ttf", 30)
+        self.font3 = ImageFont.truetype("AloneX/helpers/Raleway-Bold.ttf", 25) # Federasyon yazısı için
 
     async def save_thumb(self, output_path: str, url: str) -> str:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
-                open(output_path, "wb").write(await resp.read())
+                if resp.status == 200:
+                    with open(output_path, "wb") as f:
+                        f.write(await resp.read())
             return output_path
 
     async def generate(self, song: Track, size=(1280, 720)) -> str:
@@ -44,6 +47,13 @@ class Thumbnail:
             image.paste(_rect, (183, 30), _rect)
 
             draw = ImageDraw.Draw(image)
+            
+            # --- YANILGI FEDERASYONU EKLEMESİ (Sağ Üst Köşe) ---
+            federasyon_text = "Yanılgı Federasyonu"
+            # Metin boyutunu hesaplayıp sağa yaslıyoruz
+            draw.text((1000, 30), federasyon_text, font=self.font3, fill=(255, 255, 255, 180)) 
+            # --------------------------------------------------
+
             draw.text((50, 560), f"{song.channel_name[:25]} | {song.view_count}", font=self.font2, fill=self.fill)
             draw.text((50, 600), song.title[:50], font=self.font1, fill=self.fill)
             draw.text((40, 650), "0:01", font=self.font1)
@@ -53,5 +63,5 @@ class Thumbnail:
             image.save(output)
             os.remove(temp)
             return output
-        except:
-            config.DEFAULT_THUMB
+        except Exception:
+            return config.DEFAULT_THUMB
