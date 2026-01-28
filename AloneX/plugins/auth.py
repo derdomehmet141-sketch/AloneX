@@ -11,7 +11,7 @@ from AloneX import app, db, lang
 from AloneX.helpers import admin_check, is_admin, utils
 
 
-@app.on_message(filters.command(["auth", "unauth"]) & filters.group & ~app.bl_users)
+@app.on_message(filters.command(["yetkiver", "yetkial"]) & filters.group & ~app.bl_users)
 @lang.language()
 @admin_check
 async def _auth(_, m: types.Message):
