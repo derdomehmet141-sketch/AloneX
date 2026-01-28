@@ -1,158 +1,171 @@
-# Copyright (c) 2025 TheHamkerAlone
-# Licensed under the MIT License.
-# This file is part of AloneX
+# This file is part of AloneXMusic
 
-import asyncio
-from pyrogram import enums, errors, types
-from AloneX import app, config, db, logger, queue, yt
-from AloneX.helpers import utils
 
-# --- EN SADE BUTON YAPISI ---
+from pyrogram import types
+
+from AloneX import app, config, lang
+from AloneX.core.lang import lang_codes
+
+
 class Inline:
     def __init__(self):
         self.ikm = types.InlineKeyboardMarkup
         self.ikb = types.InlineKeyboardButton
 
-    def start_key(self, lang: dict = None) -> types.InlineKeyboardMarkup:
-        # Başlangıç butonları
+    def cancel_dl(self, text) -> types.InlineKeyboardMarkup:
+        return self.ikm([[self.ikb(text=text, callback_data=f"cancel_dl")]])
+
+    def controls(
+        self,
+        chat_id: int,
+        status: str = None,
+        timer: str = None,
+        remove: bool = False,
+    ) -> types.InlineKeyboardMarkup:
+        keyboard = []
+        if status:
+            keyboard.append(
+                [self.ikb(text=status, callback_data=f"controls status {chat_id}")]
+            )
+        elif timer:
+            keyboard.append(
+                [self.ikb(text=timer, callback_data=f"controls status {chat_id}")]
+            )
+
+        if not remove:
+            keyboard.append(
+                [
+                    self.ikb(text="▷", callback_data=f"controls resume {chat_id}"),
+                    self.ikb(text="II", callback_data=f"controls pause {chat_id}"),
+                    self.ikb(text="⥁", callback_data=f"controls replay {chat_id}"),
+                    self.ikb(text="‣‣I", callback_data=f"controls skip {chat_id}"),
+                    self.ikb(text="▢", callback_data=f"controls stop {chat_id}"),
+                ]
+            )
+        return self.ikm(keyboard)
+
+    def help_markup(
+        self, _lang: dict, back: bool = False
+    ) -> types.InlineKeyboardMarkup:
+        if back:
+            rows = [
+                [
+                    self.ikb(text=_lang["back"], callback_data="help back"),
+                    self.ikb(text=_lang["close"], callback_data="help close"),
+                ]
+            ]
+        else:
+            cbs = ["admins", "auth", "blist", "lang", "ping", "play", "queue", "stats", "sudo"]
+            buttons = [
+                self.ikb(text=_lang[f"help_{i}"], callback_data=f"help {cb}")
+                for i, cb in enumerate(cbs)
+            ]
+            rows = [buttons[i : i + 3] for i in range(0, len(buttons), 3)]
+
+        return self.ikm(rows)
+
+    def lang_markup(self, _lang: str) -> types.InlineKeyboardMarkup:
+        langs = lang.get_languages()
+
+        buttons = [
+            self.ikb(
+                text=f"{name} ({code}) {'✔️' if code == _lang else ''}",
+                callback_data=f"lang_change {code}",
+            )
+            for code, name in langs.items()
+        ]
+        rows = [buttons[i : i + 2] for i in range(0, len(buttons), 2)]
+        return self.ikm(rows)
+
+    def ping_markup(self, text: str) -> types.InlineKeyboardMarkup:
+        return self.ikm([[self.ikb(text=text, url=config.SUPPORT_CHAT)]])
+
+    def play_queued(
+        self, chat_id: int, item_id: str, _text: str
+    ) -> types.InlineKeyboardMarkup:
         return self.ikm(
             [
                 [
                     self.ikb(
-                        text="➕ Beni Grubuna Ekle",
-                        url=f"https://t.me/{app.username}?startgroup=true",
+                        text=_text, callback_data=f"controls force {chat_id} {item_id}"
                     )
-                ],
-                [
-                    self.ikb(text="📢 Kanal", url="https://t.me/kaygisizlarsohbet"),
-                    self.ikb(text="🗑 Kapat", callback_data="close"),
-                ],
-            ]
-        )
-
-    def controls(self, chat_id: int, is_playing: bool = True) -> types.InlineKeyboardMarkup:
-        # Tüm oynatma kontrolleri (duraklat, atla, durdur vb.) kaldırıldı.
-        # Sadece Kapat butonu bırakıldı.
-        return self.ikm(
-            [
-                [
-                    self.ikb(text="🗑 Kapat", callback_data="close"),
                 ]
             ]
         )
 
-    def close_key(self) -> types.InlineKeyboardMarkup:
-        return self.ikm([[self.ikb(text="🗑 Kapat", callback_data="close")]])
-
-# --- MEVCUT checkUB FONKSİYONU (DOKUNULMADI) ---
-def checkUB(play):
-    async def wrapper(_, m: types.Message):
-        if not m.from_user:
-            return await m.reply_text(m.lang["play_user_invalid"])
-
-        chat_id = m.chat.id
-        if m.chat.type != enums.ChatType.SUPERGROUP:
-            await m.reply_text(m.lang["play_chat_invalid"])
-            return await app.leave_chat(chat_id)
-
-        if not m.reply_to_message and (
-            len(m.command) < 2 or (len(m.command) == 2 and m.command[1] == "-f")
-        ):
-            return await m.reply_text(m.lang["play_usage"])
-
-        if len(queue.get_queue(chat_id)) >= config.QUEUE_LIMIT:
-            return await m.reply_text(m.lang["play_queue_full"].format(config.QUEUE_LIMIT))
-
-        force = m.command[0].endswith("force") or (
-            len(m.command) > 1 and "-f" in m.command[1]
+    def queue_markup(
+        self, chat_id: int, _text: str, playing: bool
+    ) -> types.InlineKeyboardMarkup:
+        _action = "pause" if playing else "resume"
+        return self.ikm(
+            [[self.ikb(text=_text, callback_data=f"controls {_action} {chat_id} q")]]
         )
-        video = m.command[0][0] == "v" and config.VIDEO_PLAY
-        url = utils.get_url(m)
-        m3u8 = url and not yt.valid(url)
 
-        play_mode = await db.get_play_mode(chat_id)
-        if play_mode or force:
-            adminlist = await db.get_admins(chat_id)
-            if (
-                m.from_user.id not in adminlist
-                and not await db.is_auth(chat_id, m.from_user.id)
-                and not m.from_user.id in app.sudoers
-            ):
-                return await m.reply_text(m.lang["play_admin"])
+    def settings_markup(
+        self, lang: dict, admin_only: bool, cmd_delete: bool, language: str, chat_id: int
+    ) -> types.InlineKeyboardMarkup:
+        return self.ikm(
+            [
+                [
+                    self.ikb(
+                        text=lang["play_mode"] + " ➜",
+                        callback_data="settings",
+                    ),
+                    self.ikb(text=admin_only, callback_data="settings play"),
+                ],
+                [
+                    self.ikb(
+                        text=lang["cmd_delete"] + " ➜",
+                        callback_data="settings",
+                    ),
+                    self.ikb(text=cmd_delete, callback_data="settings delete"),
+                ],
+                [
+                    self.ikb(
+                        text=lang["language"] + " ➜",
+                        callback_data="settings",
+                    ),
+                    self.ikb(text=lang_codes[language], callback_data="language"),
+                ],
+            ]
+        )
 
-        if chat_id not in db.active_calls:
-            client = await db.get_client(chat_id)
-            try:
-                member = await app.get_chat_member(chat_id, client.id)
-                if member.status in [
-                    enums.ChatMemberStatus.BANNED,
-                    enums.ChatMemberStatus.RESTRICTED,
-                ]:
-                    try:
-                        await app.unban_chat_member(
-                            chat_id=chat_id, user_id=client.id
-                        )
-                    except:
-                        return await m.reply_text(
-                            m.lang["play_banned"].format(
-                                app.name,
-                                client.id,
-                                client.mention,
-                                f"@{client.username}" if client.username else None,
-                            )
-                        )
-            except errors.ChatAdminRequired:
-                return await m.reply_text(m.lang["admin_required"])
-            except (errors.UserNotParticipant, errors.exceptions.bad_request_400.UserNotParticipant):
-                if m.chat.username:
-                    invite_link = m.chat.username
-                    try:
-                        await client.resolve_peer(invite_link)
-                    except:
-                        pass
-                else:
-                    try:
-                        invite_link = (await app.get_chat(chat_id)).invite_link
-                        if not invite_link:
-                            invite_link = await app.export_chat_invite_link(chat_id)
-                    except errors.ChatAdminRequired:
-                        return await m.reply_text(m.lang["admin_required"])
-                    except Exception as ex:
-                        return await m.reply_text(
-                            m.lang["play_invite_error"].format(type(ex).__name__)
-                        )
-
-                umm = await m.reply_text(m.lang["play_invite"].format(app.name))
-                await asyncio.sleep(2)
-                try:
-                    await client.join_chat(invite_link)
-                except errors.UserAlreadyParticipant:
-                    pass
-                except errors.InviteRequestSent:
-                    await asyncio.sleep(2)
-                    try:
-                        await client.approve_chat_join_request(chat_id, client.id)
-                    except errors.HideRequesterMissing:
-                        pass
-                    except Exception as ex:
-                        return await umm.edit_text(
-                            m.lang["play_invite_error"].format(type(ex).__name__)
-                        )
-                except Exception as ex:
-                    logger.error(f"Error joining chat - {chat_id}: {ex}")
-                    return await umm.edit_text(
-                        m.lang["play_invite_error"].format(type(ex).__name__)
+    def start_key(
+        self, lang: dict, private: bool = False
+    ) -> types.InlineKeyboardMarkup:
+        rows = [
+            [
+                self.ikb(
+                    text=lang["add_me"],
+                    url=f"https://t.me/{app.username}?startgroup=true",
+                )
+            ],
+            [self.ikb(text=lang["help"], callback_data="help")],
+            [
+                self.ikb(text=lang["support"], url=config.SUPPORT_CHAT),
+                self.ikb(text=lang["channel"], url=config.SUPPORT_CHANNEL),
+            ],
+        ]
+        if private:
+            rows += [
+                [
+                    self.ikb(text=lang["aloneowner"], user_id=config.OWNER_ID),
+                    self.ikb(
+                        text=lang["source"],
+                        url="https://github.com/TeamAloneOp/AloneX",
                     )
+                ]
+            ]
+        else:
+            rows += [[self.ikb(text=lang["language"], callback_data="language")]]
+        return self.ikm(rows)
 
-                await umm.delete()
-                await client.resolve_peer(chat_id)
-
-        if await db.get_cmd_delete(chat_id):
-            try:
-                await m.delete()
-            except:
-                pass
-
-        return await play(_, m, force, m3u8, video, url)
-
-    return wrapper
+    def yt_key(self, link: str) -> types.InlineKeyboardMarkup:
+        return self.ikm(
+            [
+                [
+                    self.ikb(text="❐", copy_text=link),
+                    self.ikb(text="Youtube", url=link),
+                ],
+            ]
+        )
