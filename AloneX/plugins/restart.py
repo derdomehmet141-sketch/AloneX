@@ -13,7 +13,7 @@ from pyrogram import filters, types
 from AloneX import app, db, lang, stop
 
 
-@app.on_message(filters.command(["logs"]) & app.sudoers)
+@app.on_message(filters.command(["loglar"]) & app.sudoers)
 @lang.language()
 async def _logs(_, m: types.Message):
     sent = await m.reply_text(m.lang["log_fetch"])
