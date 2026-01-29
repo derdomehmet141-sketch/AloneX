@@ -52,7 +52,7 @@
     "play_downloading": "İndiriliyor...",
     "play_paused": "<b>⏸ Yayın Duraklatıldı.</b>",
     "play_resumed": "<b>▶️ Yayın Devam Ediyor.</b>",
-    "play_now": "<b>⚡ Yayın Başlatılıyor...</b>",
+    "play_now": "⚡ şimdi oynat ",
     "play_replayed": "<b>🔄 Tekrar Oynatılıyor.</b>",
     "play_again": "<b>🔄 Yayın yeniden başlatılıyor...</b>",
     "play_next": "<b>⏭ Sıradaki parçaya geçiliyor...</b>",
