@@ -55,6 +55,7 @@
     "play_now": "<b>⚡ Yayın Başlatılıyor...</b>",
     "play_replayed": "<b>🔄 Tekrar Oynatılıyor.</b>",
     "play_again": "<b>🔄 Yayın yeniden başlatılıyor...</b>",
+    "play_next": "<b>⏭ Sıradaki parçaya geçiliyor...</b>",
     "play_skipped": "<b>⏭ Parça Atlandı.</b>",
     "play_stopped": "<b>⏹ Yayın Durduruldu.</b>",
     "play_chat_invalid": "Bot sadece gruplarda çalışır.",
