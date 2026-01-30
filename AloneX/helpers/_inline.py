@@ -1,11 +1,8 @@
 # This file is part of AloneXMusic
 
-
 from pyrogram import types
-
 from AloneX import app, config, lang
 from AloneX.core.lang import lang_codes
-
 
 class Inline:
     def __init__(self):
@@ -33,13 +30,31 @@ class Inline:
             )
 
         if not remove:
+            # 1. Buton: Bağımsız Gruba Ekleme
             keyboard.append(
                 [
-                    self.ikb(text="▷", callback_data=f"controls resume {chat_id}"),
-                    self.ikb(text="II", callback_data=f"controls pause {chat_id}"),
-                    self.ikb(text="⥁", callback_data=f"controls replay {chat_id}"),
-                    self.ikb(text="‣‣I", callback_data=f"controls skip {chat_id}"),
-                    self.ikb(text="▢", callback_data=f"controls stop {chat_id}"),
+                    self.ikb(
+                        text="➕ Beni Grubuna Ekle", 
+                        url=f"https://t.me/{app.username}?startgroup=true"
+                    )
+                ]
+            )
+            # 2. Buton: Bağımsız Özel Kanal Linki
+            keyboard.append(
+                [
+                    self.ikb(
+                        text="📢 Resmi Kanalımız", 
+                        url="https://t.me/SeninKanalin"  # Burayı düzenlemeyi unutma
+                    )
+                ]
+            )
+            # 3. Buton: Bağımsız Kapatma
+            keyboard.append(
+                [
+                    self.ikb(
+                        text="🗑 Menüyü Kapat", 
+                        callback_data="help close"
+                    )
                 ]
             )
         return self.ikm(keyboard)
@@ -152,7 +167,7 @@ class Inline:
                     self.ikb(text=lang["aloneowner"], user_id=config.OWNER_ID),
                     self.ikb(
                         text=lang["source"],
-                        url="https://t.me/yanilgiyeniden",
+                        url="https://t.me/kaygisizlarsohbet",
                     )
                 ]
             ]
