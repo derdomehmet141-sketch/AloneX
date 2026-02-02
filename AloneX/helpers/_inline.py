@@ -30,7 +30,7 @@ class Inline:
             )
 
         if not remove:
-            # 1. Buton: Bağımsız Gruba Ekleme
+            # 1. Satır: Tekli Büyük Buton
             keyboard.append(
                 [
                     self.ikb(
@@ -39,22 +39,11 @@ class Inline:
                     )
                 ]
             )
-            # 2. Buton: Bağımsız Özel Kanal Linki
+            # 2. Satır: Yan Yana İki Buton
             keyboard.append(
                 [
-                    self.ikb(
-                        text="📢 Resmi Kanalımız", 
-                        url="https://t.me/SeninKanalin"  # Burayı düzenlemeyi unutma
-                    )
-                ]
-            )
-            # 3. Buton: Bağımsız Kapatma
-            keyboard.append(
-                [
-                    self.ikb(
-                        text="🗑 Menüyü Kapat", 
-                        callback_data="help close"
-                    )
+                    self.ikb(text="📢 Kanal", url="https://t.me/kumsalbots"),
+                    self.ikb(text="🗑 Kapat", callback_data="help close")
                 ]
             )
         return self.ikm(keyboard)
@@ -138,9 +127,9 @@ class Inline:
                 [
                     self.ikb(
                         text=lang["language"] + " ➜",
-                        callback_data="settings",
+                        callback_data="settings play", # Dil butonunu oynatma ayarlarına bağladım
                     ),
-                    self.ikb(text=lang_codes[language], callback_data="language"),
+                    self.ikb(text=lang_codes[language], callback_data="settings play"),
                 ],
             ]
         )
