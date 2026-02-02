@@ -248,7 +248,7 @@ Sebep : {message.text}
 
 @app.on_message(filters.command("kurttag") & filters.group)
 async def kurttag(app, message):
-    from anony import LOGGER_ID  # DÜZELTME: Import buraya taşındı
+    from AloneX import LOGGER_ID  # DÜZELTME: Import buraya taşındı
 
     admins = []
     async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
@@ -377,7 +377,7 @@ Sebep : {message.text}
     
 @app.on_message(filters.command("anonimtag") & filters.group)
 async def anonimtag(app, message):
-    from anony import LOGGER_ID  # DÜZELTME: Import buraya taşındı
+    from anony AloneX LOGGER_ID  # DÜZELTME: Import buraya taşındı
 
     admins = []
     async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
@@ -652,7 +652,7 @@ async def _eros(client: app, message: Message):
 
 @app.on_message(filters.command("chatmode") & filters.group)
 async def chat_mode_controller(bot: app, msg: Message):
-    from anony import LOGGER_ID  # DÜZELTME: Import buraya taşındı
+    from AloneX import LOGGER_ID  # DÜZELTME: Import buraya taşındı
 
     admins = []
     async for member in bot.get_chat_members(msg.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
@@ -1304,7 +1304,7 @@ async def slot(client: app, query: CallbackQuery):
 
 @app.on_message(filters.command(["slap", "sille"]) & filters.group)
 async def slap(bot: app, message: Message):
-    from anony import LOGGER_ID, OWNER_ID # DÜZELTME: Import buraya taşındı (Her ikisi de)
+    from AloneX import LOGGER_ID, OWNER_ID # DÜZELTME: Import buraya taşındı (Her ikisi de)
     
     chat = message.chat
     if not message.reply_to_message:
@@ -1344,7 +1344,7 @@ async def slap(bot: app, message: Message):
 
 @app.on_message(filters.command(["oner"]) & filters.group)
 async def oner(bot: app, message: Message):
-    from anony import LOGGER_ID, OWNER_ID # DÜZELTME: Import buraya taşındı (Her ikisi de)
+    from AloneX import LOGGER_ID, OWNER_ID # DÜZELTME: Import buraya taşındı (Her ikisi de)
     
     chat = message.chat
     if not message.reply_to_message:
