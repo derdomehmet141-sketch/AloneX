@@ -377,7 +377,7 @@ Sebep : {message.text}
     
 @app.on_message(filters.command("anonimtag") & filters.group)
 async def anonimtag(app, message):
-    from AloneX LOGGER_ID  # DÜZELTME: Import buraya taşındı
+    from AloneX import LOGGER_ID  # DÜZELTME: Import buraya taşındı
 
     admins = []
     async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
