@@ -10,7 +10,8 @@ class Inline:
         self.ikb = types.InlineKeyboardButton
 
     def cancel_dl(self, text) -> types.InlineKeyboardMarkup:
-        return self.ikm([[self.ikb(text=text, callback_data=f"cancel_dl")]])
+        # İndirme iptal butonu
+        return self.ikm([[self.ikb(text="❌ İᴘᴛᴀʟ 𝐄ᴛ", callback_data=f"cancel_dl")]])
 
     def controls(
         self,
@@ -30,11 +31,11 @@ class Inline:
             )
 
         if not remove:
-            # 1. Satır: Tekli Büyük Buton
+            # 1. Satır: Tekli Büyük Buton - Süslü Font
             keyboard.append(
                 [
                     self.ikb(
-                        text="➕ Beni Grubuna Ekle", 
+                        text="✙ 𝐁єηі 𝐆ʀσυвυηα 𝐄ᴋʟє ✙", 
                         url=f"https://t.me/{app.username}?startgroup=true"
                     )
                 ]
@@ -42,8 +43,8 @@ class Inline:
             # 2. Satır: Yan Yana İki Buton
             keyboard.append(
                 [
-                    self.ikb(text="📢 Kanal", url="https://t.me/kumsalbots"),
-                    self.ikb(text="🗑 Kapat", callback_data="help close")
+                    self.ikb(text="˹ 𝐃єѕᴛєᴋ ˼", url="https://t.me/kumsalbots"),
+                    self.ikb(text="⌯ 𝐊ᴀᴘᴀᴛ ⌯", callback_data="help close")
                 ]
             )
         return self.ikm(keyboard)
@@ -82,7 +83,8 @@ class Inline:
         return self.ikm(rows)
 
     def ping_markup(self, text: str) -> types.InlineKeyboardMarkup:
-        return self.ikm([[self.ikb(text=text, url=config.SUPPORT_CHAT)]])
+        # Ping ekranındaki destek butonu
+        return self.ikm([[self.ikb(text="˹ 𝐃єѕᴛєᴋ ˼", url=config.SUPPORT_CHAT)]])
 
     def play_queued(
         self, chat_id: int, item_id: str, _text: str
@@ -91,7 +93,7 @@ class Inline:
             [
                 [
                     self.ikb(
-                        text=_text, callback_data=f"controls force {chat_id} {item_id}"
+                        text="⚡ 𝐒̧ɪᴍᴅɪ 𝐏ᴀᴛʟᴀᴛ", callback_data=f"controls force {chat_id} {item_id}"
                     )
                 ]
             ]
@@ -112,22 +114,22 @@ class Inline:
             [
                 [
                     self.ikb(
-                        text=lang["play_mode"] + " ➜",
+                        text="𝐎ʏɴᴀᴛᴍᴀ 𝐌ᴏᴅᴜ ➜",
                         callback_data="settings",
                     ),
                     self.ikb(text=admin_only, callback_data="settings play"),
                 ],
                 [
                     self.ikb(
-                        text=lang["cmd_delete"] + " ➜",
+                        text="𝐊ᴏᴍᴜᴛ 𝐒ɪʟᴍᴇ ➜",
                         callback_data="settings",
                     ),
                     self.ikb(text=cmd_delete, callback_data="settings delete"),
                 ],
                 [
                     self.ikb(
-                        text=lang["language"] + " ➜",
-                        callback_data="settings play", # Dil butonunu oynatma ayarlarına bağladım
+                        text="🌐 𝐃ɪʟ 𝐒ᴇᴄ̧ɪɴ ➜",
+                        callback_data="settings play",
                     ),
                     self.ikb(text=lang_codes[language], callback_data="settings play"),
                 ],
@@ -140,36 +142,36 @@ class Inline:
         rows = [
             [
                 self.ikb(
-                    text=lang["add_me"],
+                    text="✙ 𝐁єηі 𝐆ʀσυвυηα 𝐄ᴋʟє ✙",
                     url=f"https://t.me/{app.username}?startgroup=true",
                 )
             ],
-            [self.ikb(text=lang["help"], callback_data="help")],
+            [self.ikb(text="˹ 𝐘ᴀʀᴅıᴍ ᴠє 𝐊ᴏᴍυᴛʟᴀʀ ˼", callback_data="help")],
             [
-                self.ikb(text=lang["support"], url=config.SUPPORT_CHAT),
-                self.ikb(text=lang["channel"], url=config.SUPPORT_CHANNEL),
+                self.ikb(text="˹ 𝐃єѕᴛєᴋ ˼", url=config.SUPPORT_CHAT),
+                self.ikb(text="˹ 𝐆ϋηᴄєʟʟєᴍєʟєʀ ˼", url=config.SUPPORT_CHANNEL),
             ],
         ]
         if private:
             rows += [
                 [
-                    self.ikb(text=lang["aloneowner"], user_id=config.OWNER_ID),
+                    self.ikb(text="˹ 𝐒ᴀʜіʙі ˼", user_id=config.OWNER_ID),
                     self.ikb(
-                        text=lang["source"],
+                        text="˹ 𝐊ᴀηᴀʟ ˼",
                         url="https://t.me/kaygisizlarsohbet",
                     )
                 ]
             ]
         else:
-            rows += [[self.ikb(text=lang["language"], callback_data="language")]]
+            rows += [[self.ikb(text="🌐 𝐃іʟ", callback_data="language")]]
         return self.ikm(rows)
 
     def yt_key(self, link: str) -> types.InlineKeyboardMarkup:
         return self.ikm(
             [
                 [
-                    self.ikb(text="❐", copy_text=link),
-                    self.ikb(text="Youtube", url=link),
+                    self.ikb(text="❐ 𝐊ᴏᴘʏᴀʟᴀ", copy_text=link),
+                    self.ikb(text="𝐘ᴏᴜᴛᴜʙᴇ", url=link),
                 ],
             ]
-        )
+        ) # Parantez hatası düzeltildi
