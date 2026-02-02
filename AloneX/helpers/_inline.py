@@ -1,3 +1,5 @@
+# Copyright (c) 2025 TheHamkerAlone
+# Licensed under the MIT License.
 # This file is part of AloneXMusic
 
 from pyrogram import types
@@ -11,7 +13,7 @@ class Inline:
 
     def cancel_dl(self, text) -> types.InlineKeyboardMarkup:
         # İndirme iptal butonu
-        return self.ikm([[self.ikb(text="❌ İᴘᴛᴀʟ 𝐄ᴛ", callback_data=f"cancel_dl")]])
+        return self.ikm([[self.ikb(text=text, callback_data=f"cancel_dl")]])
 
     def controls(
         self,
@@ -60,11 +62,16 @@ class Inline:
                 ]
             ]
         else:
-            cbs = ["admins", "auth", "blist", "lang", "ping", "play", "queue", "stats", "sudo"]
-            buttons = [
-                self.ikb(text=_lang[f"help_{i}"], callback_data=f"help {cb}")
-                for i, cb in enumerate(cbs)
-            ]
+            # Yeni kategoriler (etiket ve eglence) buraya eklendi
+            cbs = ["admins", "auth", "blist", "lang", "ping", "play", "queue", "stats", "sudo", "etiket", "eglence"]
+            
+            buttons = []
+            for cb in cbs:
+                # Dil dosyasından metni çek, yoksa kategori adını kullan
+                text = _lang.get(f"help_{cb}", cb.capitalize())
+                buttons.append(self.ikb(text=text, callback_data=f"help {cb}"))
+            
+            # Butonları 3'lü sıralar halinde dizer
             rows = [buttons[i : i + 3] for i in range(0, len(buttons), 3)]
 
         return self.ikm(rows)
@@ -83,7 +90,6 @@ class Inline:
         return self.ikm(rows)
 
     def ping_markup(self, text: str) -> types.InlineKeyboardMarkup:
-        # Ping ekranındaki destek butonu
         return self.ikm([[self.ikb(text="˹ 𝐃єѕᴛєᴋ ˼", url=config.SUPPORT_CHAT)]])
 
     def play_queued(
@@ -113,25 +119,16 @@ class Inline:
         return self.ikm(
             [
                 [
-                    self.ikb(
-                        text="𝐎ʏɴᴀᴛᴍᴀ 𝐌ᴏᴅᴜ ➜",
-                        callback_data="settings",
-                    ),
+                    self.ikb(text="𝐎ʏɴᴀᴛᴍᴀ 𝐌ᴏᴅᴜ ➜", callback_data="settings"),
                     self.ikb(text=admin_only, callback_data="settings play"),
                 ],
                 [
-                    self.ikb(
-                        text="𝐊ᴏᴍᴜᴛ 𝐒ɪʟᴍᴇ ➜",
-                        callback_data="settings",
-                    ),
+                    self.ikb(text="𝐊ᴏᴍᴜᴛ 𝐒ɪʟᴍᴇ ➜", callback_data="settings"),
                     self.ikb(text=cmd_delete, callback_data="settings delete"),
                 ],
                 [
-                    self.ikb(
-                        text="🌐 𝐃ɪʟ 𝐒ᴇᴄ̧ɪɴ ➜",
-                        callback_data="settings play",
-                    ),
-                    self.ikb(text=lang_codes[language], callback_data="settings play"),
+                    self.ikb(text="🌐 𝐃ɪʟ 𝐒ᴇᴄ̧ɪɴ ➜", callback_data="settings play"),
+                    self.ikb(text=lang_codes[language], callback_data="language"),
                 ],
             ]
         )
@@ -174,4 +171,4 @@ class Inline:
                     self.ikb(text="𝐘ᴏᴜᴛᴜʙᴇ", url=link),
                 ],
             ]
-        ) # Parantez hatası düzeltildi
+        )
