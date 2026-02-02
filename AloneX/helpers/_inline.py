@@ -13,7 +13,7 @@ class Inline:
 
     def cancel_dl(self, text) -> types.InlineKeyboardMarkup:
         # İndirme iptal butonu
-        return self.ikm([[self.ikb(text=text, callback_data=f"cancel_dl")]])
+        return self.ikm([[self.ikb(text="❌ İᴘᴛᴀʟ 𝐄ᴛ", callback_data=f"cancel_dl")]])
 
     def controls(
         self,
@@ -33,7 +33,7 @@ class Inline:
             )
 
         if not remove:
-            # 1. Satır: Tekli Büyük Buton - Süslü Font
+            # 1. Satır: Gruba Ekleme Butonu
             keyboard.append(
                 [
                     self.ikb(
@@ -42,7 +42,7 @@ class Inline:
                     )
                 ]
             )
-            # 2. Satır: Yan Yana İki Buton
+            # 2. Satır: Destek ve Kapat Butonları
             keyboard.append(
                 [
                     self.ikb(text="˹ 𝐃єѕᴛєᴋ ˼", url="https://t.me/kumsalbots"),
@@ -62,16 +62,21 @@ class Inline:
                 ]
             ]
         else:
-            # Yeni kategoriler (etiket ve eglence) buraya eklendi
-            cbs = ["admins", "auth", "blist", "lang", "ping", "play", "queue", "stats", "sudo", "etiket", "eglence"]
+            # Mevcut kategoriler + Etiket ve Eğlence eklendi
+            cbs = [
+                "admins", "auth", "blist", 
+                "lang", "ping", "play", 
+                "queue", "stats", "sudo",
+                "etiket", "eglence"
+            ]
             
             buttons = []
             for cb in cbs:
-                # Dil dosyasından metni çek, yoksa kategori adını kullan
+                # Dil dosyasından (tr.py vb.) metni çeker, yoksa baş harfi büyük yazar
                 text = _lang.get(f"help_{cb}", cb.capitalize())
                 buttons.append(self.ikb(text=text, callback_data=f"help {cb}"))
             
-            # Butonları 3'lü sıralar halinde dizer
+            # Butonları 3'lü sıralar halinde otomatik olarak dizer
             rows = [buttons[i : i + 3] for i in range(0, len(buttons), 3)]
 
         return self.ikm(rows)
