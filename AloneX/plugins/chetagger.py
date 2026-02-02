@@ -818,8 +818,8 @@ async def chatModeHandler(bot: app, msg: Message):
         reply = random.choice(bekle)
         await asyncio.sleep(0.06)   
         
-    elif kontrol(["tünaydın"], text):
-        reply = random.choice(tünaydın)
+    elif kontrol(["mustafa", "ragnar", "kaygisizlarkurucu"], text):
+        reply = random.choice(ragnar)
         await asyncio.sleep(0.06)     
     
     elif kontrol(["günaydın"], text):
