@@ -33,7 +33,7 @@ chat_mode_users = {} # Chatmode yetki kontrolü için
 
 @app.on_message(filters.command("tag") & filters.group)
 async def tag(app, message):
-    from anony import LOGGER_ID  # DÜZELTME: Import buraya taşındı
+    from AloneX.plugins.cheetiket import LOGGER_ID  # DÜZELTME: Import buraya taşındı
 
     admins = []
     async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
