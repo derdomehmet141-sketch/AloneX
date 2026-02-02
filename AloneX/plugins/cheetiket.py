@@ -46,7 +46,7 @@ slm = (
 "**Selamm**",  
 )
 
-Aynur = (
+kumsal = (
 "**Efendim Dost** 🫢",
 "**Beni mi çağırdıın** 🫠",
 "**Efendimm** ❣️",
@@ -220,12 +220,12 @@ bekle = (
 "**Sizi özledim**",
 )
 
-tünaydın = (
-"**Tünaydın**",
-"**Sana da**",
-"**Sana da, naber?**",
-"**Akşam oldu ya ne tünaydını** 😂",
-"**Tünaydın, napiyorsun?**",
+ragnar = (
+"**@kaygisizlarkurucu Baba sana sesleniyorlar**",
+"**babam da babam**",
+"**ne istiyorsun babamdan**",
+"**@kaygisizlarkurucu Baba dedikodunu yapıyorlar** 😂",
+"**günaydın babamm?**",
 )
 
 günaydın = (
