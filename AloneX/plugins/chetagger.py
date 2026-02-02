@@ -311,7 +311,7 @@ Sebep : {message.text}
 
 @app.on_message(filters.command("tabutag") & filters.group)
 async def tabutag(app, message):
-    from anony import LOGGER_ID  # DÜZELTME: Import buraya taşındı
+    from AloneX import LOGGER_ID  # DÜZELTME: Import buraya taşındı
 
     admins = []
     async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
@@ -377,7 +377,7 @@ Sebep : {message.text}
     
 @app.on_message(filters.command("anonimtag") & filters.group)
 async def anonimtag(app, message):
-    from anony AloneX LOGGER_ID  # DÜZELTME: Import buraya taşındı
+    from AloneX LOGGER_ID  # DÜZELTME: Import buraya taşındı
 
     admins = []
     async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
@@ -442,7 +442,7 @@ Sebep : {message.text}
     
 @app.on_message(filters.command("utag") & filters.group)
 async def utag(app, message):
-    from anony import LOGGER_ID  # DÜZELTME: Import buraya taşındı
+    from AloneX import LOGGER_ID  # DÜZELTME: Import buraya taşındı
 
     admins = []
     async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
