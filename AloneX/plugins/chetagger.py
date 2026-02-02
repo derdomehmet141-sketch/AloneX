@@ -33,7 +33,7 @@ chat_mode_users = {} # Chatmode yetki kontrolü için
 
 @app.on_message(filters.command("tag") & filters.group)
 async def tag(app, message):
-    from AloneX.plugins.cheetiket import LOGGER_ID  # DÜZELTME: Import buraya taşındı
+    from AloneX import LOGGER_ID  # DÜZELTME: Import buraya taşındı
 
     admins = []
     async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
@@ -184,7 +184,7 @@ async def guntag(app, message):
 
 @app.on_message(filters.command("gecetag") & filters.group)
 async def gecetag(app, message):
-    from anony import LOGGER_ID  # DÜZELTME: Import buraya taşındı
+    from AloneX import LOGGER_ID  # DÜZELTME: Import buraya taşındı
 
     admins = []
     async for member in app.get_chat_members(message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS):
