@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 # This file is part of AloneX
 
-
 import time
 import logging
 from logging.handlers import RotatingFileHandler
@@ -21,15 +20,20 @@ logging.getLogger("ntgcalls").setLevel(logging.CRITICAL)
 logging.getLogger("pymongo").setLevel(logging.ERROR)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 logging.getLogger("pytgcalls").setLevel(logging.ERROR)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(name)
 
-
-__version__ = "3.0.1"
+version = "3.0.1"
 
 from config import Config
 
 config = Config()
 config.check()
+
+# --- HATA DÜZELTME BURADA ---
+# Plugins içindeki (chetagger.py gibi) dosyaların LOGGER_ID'yi bulabilmesi için:
+LOGGER_ID = config.LOGGER_ID
+# ----------------------------
+
 tasks = []
 boot = time.time()
 
