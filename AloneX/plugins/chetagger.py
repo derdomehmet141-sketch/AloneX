@@ -739,8 +739,8 @@ async def chatModeHandler(bot: app, msg: Message):
 
     reply = None
 
-    if text.startswith("Aynur"): 
-        reply = random.choice(Aynur)
+    if text.startswith("kumsal"): 
+        reply = random.choice(kumsal)
         await asyncio.sleep(0.06)
     
     elif kontrol(["selam", "slm", "sa", "selamlar", "selamm"], text):
